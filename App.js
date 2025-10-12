@@ -19,11 +19,20 @@ export default function App() {
     setTasks(tasks.filter(task => task.id !== id));
   }
 
+  const updateGroup = (id, groupUpd) => {
+    setTasks(tasks.map(task => {
+      if (task.id === id) {
+        task.group = groupUpd;
+      }
+      return task;
+    }));
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <AddBar newGroup={newGroup}/>
-      <DisplayGroups tasks={tasks} deleteGroup={deleteGroup} />
+      <AddBar newGroup={newGroup} />
+      <DisplayGroups tasks={tasks} deleteGroup={deleteGroup} updateGroup={updateGroup} />
     </View>
   );
 }
