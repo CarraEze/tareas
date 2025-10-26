@@ -1,38 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Modal } from 'react-native';
-import { AddBar } from './components/AddBar.js';
-import { DisplayGroups } from './components/DisplayGroups.js';
-import React, { useState } from "react";
+import { DetailView } from './views/DetailView.js';
+import { GroupsView } from './views/GroupsView.js';
+import React, { useState, useCallback } from "react";
 
 export default function App() {
-  const [tasks, setTasks] = useState([]);
-  const [idCount, nextId] = useState(0);
+  const [actualView, setActualView] = useState('GroupsView');
 
-  const newGroup = (value) => {
-    if (value.trim() != '' && tasks.filter(task => task.group === value).length === 0) {
-      setTasks([...tasks, { id: idCount + 1, group: value }]);
-      nextId(idCount + 1);
-    }
+  const goDetail = useCallback(() => setActualView('DetailView'), [setActualView]);
+  const goBack = useCallback(() => setActualView('GroupsView'), [setActualView]);
+
+  const viewsContainer = {
+    GroupsView: <GroupsView goDetail={goDetail}/>,
+    DetailView: <DetailView goBack={goBack}/>,
   };
-
-  const deleteGroup = (id) => {
-    setTasks(tasks.filter(task => task.id !== id));
-  }
-
-  const updateGroup = (id, groupUpd) => {
-    setTasks(tasks.map(task => {
-      if (task.id === id) {
-        task.group = groupUpd;
-      }
-      return task;
-    }));
-  }
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <AddBar newGroup={newGroup} />
-      <DisplayGroups tasks={tasks} deleteGroup={deleteGroup} updateGroup={updateGroup} />
+      {viewsContainer[actualView]}
     </View>
   );
 }

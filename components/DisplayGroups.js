@@ -4,21 +4,24 @@ import React, { useState } from "react";
 export const DisplayGroups = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const [id, setId] = useState(null);
 
   const handleUpdate = (id) => {
-   // set modal to true and send id and new name to App.js
+    setId(id);
+    setModalVisible(true);
   }
 
   return (
     <View>
       <FlatList
-        data={props.tasks}
+        data={props.groups}
         keyExtractor={item => item.id}
         renderItem={({ item }) =>
           <View style={styles.item}>
-            <Text style={styles.itemText}>{item.group}</Text>
+            <Text style={styles.itemText}>{item.name}</Text>
             <Pressable style={styles.itemPress} onPress={() => props.deleteGroup(item.id)}><Text style={styles.itemText}>Delete</Text></Pressable>
             <Pressable style={styles.itemPress} onPress={() => handleUpdate(item.id)}><Text style={styles.itemText}>Upd</Text></Pressable>
+            <Pressable style={styles.itemPress} onPress={() => props.goDetail()}><Text style={styles.itemText}>Detail</Text></Pressable>
           </View>
         }
       />
@@ -27,7 +30,7 @@ export const DisplayGroups = (props) => {
           <Text style={styles.itemText}>Update Group</Text>
           <TextInput placeholder="New group name" onChangeText={text =>setInputValue(text)}/>
           <Pressable onPress={() => {
-            //handleUpdate(id,newValue)
+            handleUpdate(id,newValue)
           }}><Text>Update</Text></Pressable>
           <Pressable onPress={() => setModalVisible(false)}><Text>Cancel</Text></Pressable>
         </View>
