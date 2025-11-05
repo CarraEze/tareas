@@ -1,5 +1,5 @@
 import { View, Text, TextInput, StyleSheet, FlatList, Pressable, Modal } from "react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 
 export const DisplayGroups = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -21,7 +21,7 @@ export const DisplayGroups = (props) => {
             <Text style={styles.itemText}>{item.name}</Text>
             <Pressable style={styles.itemPress} onPress={() => props.deleteGroup(item.id)}><Text style={styles.itemText}>Delete</Text></Pressable>
             <Pressable style={styles.itemPress} onPress={() => handleUpdate(item.id)}><Text style={styles.itemText}>Upd</Text></Pressable>
-            <Pressable style={styles.itemPress} onPress={() => props.goDetail()}><Text style={styles.itemText}>Detail</Text></Pressable>
+            <Pressable style={styles.itemPress} onPress={() => props.goDetail(item.id)}><Text style={styles.itemText}>Detail</Text></Pressable>
           </View>
         }
       />

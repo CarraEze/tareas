@@ -7,10 +7,10 @@ export const AddBar = (props) => {
   return (
     <View style={styles.addBarContainer}>
       <TextInput style={styles.input}
-        placeholder="New Group"
+        placeholder={props.placeholder}
         onChangeText={text => setInputValue(text)}
       />
-      <Pressable style={styles.addButton} onPress={() => props.newGroup(inputValue)}><Text>Add</Text></Pressable>
+      <Pressable style={styles.addButton} onPress={() => props.addElement(inputValue)}><Text>Add</Text></Pressable>
     </View>
   );
 };

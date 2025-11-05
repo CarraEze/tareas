@@ -2,15 +2,15 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Modal, Text, Pressable } from 'react-native';
 import { AddBar } from '../components/AddBar.js';
 import { DisplayGroups } from '../components/DisplayGroups.js';
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { DataContext } from '../Context.js';
 
 export const GroupsView = (props) => {
-  const [groups, setGroups] = useState([]);
-  const [idCount, nextId] = useState(0);
+  const { groups, setGroups, idCount, nextId } = useContext(DataContext);
 
   const newGroup = (value) => {
     if (value.trim() != '' && !(groups.some(group => group.name === value))) {
-      setGroups([...groups, { id: idCount + 1, name: value, tasks: [] }]);
+      setGroups([...groups, { id: idCount + 1, name: value, taskId: 0, tasks: [] }]);
       nextId(idCount + 1);
     }
   };
@@ -31,10 +31,8 @@ export const GroupsView = (props) => {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <AddBar newGroup={newGroup} />
+      <AddBar addElement={newGroup} placeholder={"New group"} />
       <DisplayGroups groups={groups} deleteGroup={deleteGroup} updateGroup={updateGroup} goDetail={props.goDetail} />
-      <Text style={{ color: '#fff' }}>TEST</Text>
-      <Pressable onPress={() => props.goDetail()}><Text style={{ margin: 20, color: '#fff' }}>Go Detail</Text></Pressable>
     </View>
   );
 }
