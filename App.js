@@ -1,25 +1,28 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Modal } from 'react-native';
-import { DetailView } from './views/DetailView.js';
+import { StyleSheet, View } from 'react-native';
+import { TasksView } from './views/TasksView.js';
 import { GroupsView } from './views/GroupsView.js';
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, use } from "react";
 import { DataContext } from './Context.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   const [actualView, setActualView] = useState('GroupsView');
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState([])
   const [idCount, nextId] = useState(0);
   const [idSelected, setIdSelected] = useState(0);
 
-  const goDetail = useCallback((id) =>{ 
-    setActualView('DetailView') 
+  useEffect(() => {console.log("sss")}, [groups]);
+
+  const goDetail = useCallback((id) => {
+    setActualView('TasksView')
     setIdSelected(id);
   }, [setActualView]);
   const goBack = useCallback(() => setActualView('GroupsView'), [setActualView]);
 
   const viewsContainer = {
     GroupsView: <GroupsView goDetail={goDetail} />,
-    DetailView: <DetailView goBack={goBack} idDisplayed={idSelected}/>,
+    TasksView: <TasksView goBack={goBack} idDisplayed={idSelected} />,
   };
 
   return (

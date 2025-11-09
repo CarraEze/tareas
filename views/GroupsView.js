@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Modal, Text, Pressable } from 'react-native';
 import { AddBar } from '../components/AddBar.js';
 import { DisplayGroups } from '../components/DisplayGroups.js';
-import React, { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 import { DataContext } from '../Context.js';
 
 export const GroupsView = (props) => {

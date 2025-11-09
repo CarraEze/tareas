@@ -1,19 +1,15 @@
-import { View, Text, TextInput, StyleSheet, FlatList, Pressable, Modal } from "react-native";
-import { useState } from "react";
+import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
+import { Task } from "./Task.js";
 
 export const DisplayTasks = (props) => {
-
+    
   return (
     <View>
           <FlatList
-            data={props.tasks}
+            data={props.group.tasks}
             keyExtractor={item => item.id}
             renderItem={({ item }) =>
-              <View style={styles.item}>
-                <Text style={styles.itemText}>{item.title}</Text>
-                <Text style={styles.itemText}>{item.description}</Text>
-                <Pressable onPress={() => props.deleteTask(item.id)}><Text style={styles.itemPress}>Delete</Text></Pressable>
-              </View>
+                <Task item={item} deleteTask={props.deleteTask} toggleTask={props.toggleTask} groupId={props.group.id} />
             }
           />
         </View>

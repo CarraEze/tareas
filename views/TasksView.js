@@ -1,23 +1,22 @@
 import { FlatList, Text, Pressable, View } from "react-native";
 import { DisplayTasks } from "../components/DisplayTasks.js";
-import { useContext, useState } from "react";
+import { useContext, useEffect } from "react";
 import { AddBar } from "../components/AddBar.js";
 import { DataContext } from '../Context.js';
 
 
-export const DetailView = (props) => {
-    const {groups, setGroups} = useContext(DataContext);
+export const TasksView = (props) => {
+    const { groups, setGroups } = useContext(DataContext);
 
     const addTask = (value) => {
         if (value.trim() != '') {
             setGroups(groups.map(group => {
                 if (group.id === props.idDisplayed) {
-                    group.tasks.push({ id: group.taskId, title: value, description: '', state: 'pending' });
+                    group.tasks.push({ id: group.taskId, title: value, description: '', state: false });
                     group.taskId += 1;
                 }
                 return group;
             }))
-            console.log(groups.filter(group => group.id === props.idDisplayed)[0]);
         }
     }
 
@@ -28,13 +27,28 @@ export const DetailView = (props) => {
             }
             return group
         }
-    ))}
-    
+        ))
+    }
+
+    const toggleTask = (taskIdToUpdate, groupIdToUpdate) => {
+        setGroups(groups.map(group => {
+            if (group.id === groupIdToUpdate) {
+                group.tasks = group.tasks.map(task => {
+                    if (task.id === taskIdToUpdate) {
+                        task.state = !task.state;
+                    }
+                    return task;
+                });
+            }
+            return group;
+        }));
+    }
+
     return (
         <View>
-            <AddBar addElement={addTask} placeholder={"New task"}/>
+            <AddBar addElement={addTask} placeholder={"New task"} />
             <Pressable onPress={() => props.goBack()}><Text style={{ color: '#0af', marginTop: 10 }}>Go Back</Text></Pressable>
-            <DisplayTasks tasks={groups.filter(group => group.id === props.idDisplayed)[0].tasks} deleteTask={deleteTask} />
+            <DisplayTasks group={groups.find(group => group.id === props.idDisplayed)} deleteTask={deleteTask} toggleTask={toggleTask} />
         </View>
     )
 }
