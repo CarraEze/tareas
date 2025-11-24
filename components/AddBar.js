@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, TextInput, Pressable, Text } from "react-native";
 import { StyleSheet } from "react-native";
+import { HandleContext } from '../Context.js';
 
 export const AddBar = (props) => {
   const [inputValue, setInputValue] = useState('');
+  const { addElement } = useContext(HandleContext);
+
   return (
     <View style={styles.addBarContainer}>
       <TextInput style={styles.input}
         placeholder={props.placeholder}
         onChangeText={text => setInputValue(text)}
       />
-      <Pressable style={styles.addButton} onPress={() => props.addElement(inputValue)}><Text>Add</Text></Pressable>
+      <Pressable style={styles.addButton} onPress={() => addElement(inputValue)}><Text>Add</Text></Pressable>
     </View>
   );
 };

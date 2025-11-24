@@ -2,17 +2,15 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { TasksView } from './views/TasksView.js';
 import { GroupsView } from './views/GroupsView.js';
-import { useState, useCallback, useEffect, use } from "react";
-import { DataContext } from './Context.js';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useCallback, useEffect } from "react";
+import { GeneralContext } from './Context.js';
+import { loadData, saveData } from './storage.js';
 
 export default function App() {
   const [actualView, setActualView] = useState('GroupsView');
   const [groups, setGroups] = useState([])
   const [idCount, nextId] = useState(0);
   const [idSelected, setIdSelected] = useState(0);
-
-  useEffect(() => {console.log("sss")}, [groups]);
 
   const goDetail = useCallback((id) => {
     setActualView('TasksView')
@@ -26,12 +24,12 @@ export default function App() {
   };
 
   return (
-    <DataContext.Provider value={{ groups, setGroups, idCount, nextId }}>
+    <GeneralContext.Provider value={{ groups, setGroups, idCount, nextId, saveData, loadData}}>
       <View style={styles.container}>
         <StatusBar style="auto" />
         {viewsContainer[actualView]}
       </View>
-    </DataContext.Provider>
+    </GeneralContext.Provider>
   );
 }
 

@@ -1,12 +1,12 @@
 import { FlatList, Text, Pressable, View } from "react-native";
 import { DisplayTasks } from "../components/DisplayTasks.js";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { AddBar } from "../components/AddBar.js";
-import { DataContext } from '../Context.js';
+import { GeneralContext, HandleContext } from '../Context.js';
 
 
 export const TasksView = (props) => {
-    const { groups, setGroups } = useContext(DataContext);
+    const { groups, setGroups, saveData } = useContext(GeneralContext);
 
     const addTask = (value) => {
         if (value.trim() != '') {
@@ -14,6 +14,7 @@ export const TasksView = (props) => {
                 if (group.id === props.idDisplayed) {
                     group.tasks.push({ id: group.taskId, title: value, description: '', state: false });
                     group.taskId += 1;
+                    saveData();
                 }
                 return group;
             }))
@@ -24,6 +25,7 @@ export const TasksView = (props) => {
         setGroups(groups.map(group => {
             if (group.id === props.idDisplayed) {
                 group.tasks = group.tasks.filter(task => task.id !== id);
+                saveData();
             }
             return group
         }
@@ -36,6 +38,7 @@ export const TasksView = (props) => {
                 group.tasks = group.tasks.map(task => {
                     if (task.id === taskIdToUpdate) {
                         task.state = !task.state;
+                        saveData();
                     }
                     return task;
                 });
@@ -45,10 +48,12 @@ export const TasksView = (props) => {
     }
 
     return (
-        <View>
-            <AddBar addElement={addTask} placeholder={"New task"} />
-            <Pressable onPress={() => props.goBack()}><Text style={{ color: '#0af', marginTop: 10 }}>Go Back</Text></Pressable>
-            <DisplayTasks group={groups.find(group => group.id === props.idDisplayed)} deleteTask={deleteTask} toggleTask={toggleTask} />
-        </View>
+        <HandleContext.Provider value={{ addElement : addTask }}>
+            <View>
+                <AddBar placeholder={"New task"} />
+                <Pressable onPress={() => props.goBack()}><Text style={{ color: '#0af', marginTop: 10 }}>Go Back</Text></Pressable>
+                <DisplayTasks group={groups.find(group => group.id === props.idDisplayed)} deleteTask={deleteTask} toggleTask={toggleTask} />
+            </View>
+        </HandleContext.Provider>
     )
 }

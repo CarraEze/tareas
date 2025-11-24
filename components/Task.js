@@ -2,8 +2,6 @@ import { View, Text, Pressable, StyleSheet } from "react-native";
 import { useState } from "react";
 import { Checkbox } from "expo-checkbox";
 
-
-
 export const Task = (props) => {
     const { item } = props;
     const [isChecked, setChecked] = useState(item.state);
